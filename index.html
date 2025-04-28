@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal</title>
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+
+        #terminal {
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        #input-line {
+            display: flex;
+        }
+
+        #input-prompt {
+            margin-right: 5px;
+        }
+
+        #command-input {
+            background: none;
+            border: none;
+            color: #00ff00;
+            font: inherit;
+            outline: none;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .line {
+            margin-bottom: 5px;
+        }
+
+        .output {
+            margin-left: 20px;
+        }
+
+        .subject-image {
+            max-width: 200px;
+            margin-top: 10px;
+            border: 1px solid #00ff00;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+            .subject-image:hover {
+                opacity: 1;
+            }
+
+        .hidden {
+            display: none;
+        }
+
+        .category {
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+        }
+
+            .category:hover {
+                color: #ff9900;
+            }
+
+        .terminal-output {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-bottom: 10px;
+        }
+
+        /* Logo Styling */
+        #logo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 150px; /* Adjust logo size */
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+            #logo:hover {
+                opacity: 1;
+            }
+    </style>
+</head>
+<body>
+    <!-- Music Player -->
+    <audio autoplay loop>
+        <source src="audio/Terminal-Theme.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="terminal" class="terminal-output">
+        <div class="line">CLASSIFIED INTEL - OCTARIAN ARMY - SUBJECT FILES</div>
+        <div class="line">Enter Classification Code:</div>
+        <div id="input-line">
+            <div id="input-prompt">$</div>
+            <input type="text" id="command-input" autofocus>
+        </div>
+    </div>
+
+    <!-- Logo -->
+    <img id="logo" src="images/Octarian-Logo.png" alt="Octarian Army Logo">
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const commandInput = document.getElementById('command-input');
+
+        let authenticated = false;
+        const classificationCode = "11-FH-45";
+
+        const subjectFiles = {
+            MXI78: {
+                info: `...`,  // Keep the original info here
+                image: "images/MXI78.jpg"
+            },
+            SGA19: {
+                info: `...`,  // Keep the original info here
+                image: "images/SGA19.jpg"
+            }
+        };
+
+        let currentImage = null;
+
+        function addLine(text, className = '') {
+            const line = document.createElement('div');
+            line.className = 'line ' + className;
+            line.innerHTML = text;
+            terminal.insertBefore(line, document.getElementById('input-line'));
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function addImage(src) {
+            if (currentImage) {
+                currentImage.remove();
+            }
+
+            const img = document.createElement('img');
+            img.src = src;
+            img.className = 'subject-image';
+            terminal.appendChild(img);
+            currentImage = img;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        commandInput.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                const input = commandInput.value.trim();
+                addLine(`$ ${input}`);
+                if (!authenticated) {
+                    authenticate(input);
+                } else {
+                    processCommand(input);
+                }
+                commandInput.value = '';
+            }
+        });
+
+        function authenticate(input) {
+            if (input === classificationCode) {
+                authenticated = true;
+                addLine("Welcome MXI78 - Security Clearance: Rebirth", 'output');
+                addLine("Enter a Subject ID to retrieve information.", 'output');
+            } else {
+                addLine("ACCESS DENIED. Enter Classification Code:", 'output');
+            }
+        }
+
+        function processCommand(input) {
+            if (input === 'clear') {
+                clearTerminalOutput();
+            } else if (input === 'help') {
+                showHelp();
+            } else if (input === 'status') {
+                showStatus();
+            } else if (input === 'exit') {
+                exitTerminal();
+            } else if (subjectFiles[input]) {
+                addLine(subjectFiles[input].info, 'output');
+                addImage(subjectFiles[input].image);
+            } else {
+                addLine(`Unknown command or file: ${input}`, 'output');
+            }
+        }
+
+        function showHelp() {
+            addLine(`
+                    <strong>Available Commands:</strong><br>
+                    <strong>help</strong> - Displays this help message.<br>
+                    <strong>status</strong> - Displays the current terminal status.<br>
+                    <strong>exit</strong> - Exits the terminal session.<br>
+                    <strong>clear</strong> - Clears the terminal screen.<br>
+                    <strong>[Subject ID]</strong> - View information about a specific subject (e.g., MXI78).<br>
+                `, 'output');
+        }
+
+        function showStatus() {
+            if (authenticated) {
+                addLine("You are authenticated as MXI78.", 'output');
+            } else {
+                addLine("You are not authenticated. Please enter your classification code.", 'output');
+            }
+        }
+
+        function exitTerminal() {
+            addLine("Exiting terminal... Goodbye, MXI78.", 'output');
+            setTimeout(() => {
+                window.close();
+            }, 2000);
+        }
+
+        function clearTerminalOutput() {
+            terminal.innerHTML = '';
+            addLine("Enter Classification Code:", 'output');
+        }
+
+    </script>
+</body>
+</html>
