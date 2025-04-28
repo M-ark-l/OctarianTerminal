@@ -100,7 +100,7 @@
 </head>
 <body>
     <!-- Music Player -->
-    <audio autoplay loop>
+    <audio id="terminal-music">
         <source src="audio/Terminal-Theme.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
@@ -120,6 +120,7 @@
     <script>
         const terminal = document.getElementById('terminal');
         const commandInput = document.getElementById('command-input');
+        const musicPlayer = document.getElementById('terminal-music');
 
         let authenticated = false;
         const classificationCode = "11-FH-45";
@@ -216,6 +217,12 @@ Subject is currently believed to be operating within the Splatlands region. Capt
                 currentImage.remove();  // Remove the previous image
             }
 
+            // Play audio as soon as user starts typing
+            commandInput.addEventListener('input', function () {
+                if (!audio.paused) return; // Prevent multiple triggers
+                audio.play();  // Play the background audio
+            });
+
             const img = document.createElement('img');
             img.src = src;
             img.className = 'subject-image';
@@ -266,13 +273,13 @@ Subject is currently believed to be operating within the Splatlands region. Capt
 
         function showHelp() {
             addLine(`
-                            <strong>Available Commands:</strong><br>
-                            <strong>help</strong> - Displays this help message.<br>
-                            <strong>status</strong> - Displays the current terminal status.<br>
-                            <strong>exit</strong> - Exits the terminal session.<br>
-                            <strong>clear</strong> - Clears the terminal screen.<br>
-                            <strong>[Subject ID]</strong> - View information about a specific subject.<br>
-                        `, 'output');
+                                                        <strong>Available Commands:</strong><br>
+                                                        <strong>help</strong> - Displays this help message.<br>
+                                                        <strong>status</strong> - Displays the current terminal status.<br>
+                                                        <strong>exit</strong> - Exits the terminal session.<br>
+                                                        <strong>clear</strong> - Clears the terminal screen.<br>
+                                                        <strong>[Subject ID]</strong> - View information about a specific subject.<br>
+                                                    `, 'output');
         }
 
         function showStatus() {
@@ -302,12 +309,27 @@ Subject is currently believed to be operating within the Splatlands region. Capt
         }
 
 
-            function toggleVisibility(id) {
-      const element = document.getElementById(id);
+        function toggleVisibility(id) {
+            const element = document.getElementById(id);
             if (element) {
                 element.classList.toggle('hidden');
-      }
-}
+            }
+        }
+
+        // Start the music as soon as any key is pressed in the input field
+        function startMusic() {
+            if (musicPlayer.paused) {
+                musicPlayer.loop = true;
+                musicPlayer.play();
+            }
+        }
+
+        // Trigger music start when any key is pressed in the input field
+        commandInput.addEventListener('keydown', function (event) {
+            if (event.key !== 'Enter' && commandInput.value.trim() !== '') {
+                startMusic();
+            }
+        });
     </script>
 </body>
 </html>
