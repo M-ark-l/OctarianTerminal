@@ -126,16 +126,82 @@
 
         const subjectFiles = {
             MXI78: {
-                info: `...`,  // Keep the original info here
+                info: `
+<strong>Project:</strong> Eclipse<br>
+<strong>Test Subject Number:</strong> 78<br>
+<hr>
+<div class="category" onclick="toggleVisibility('physical-description')">Physical Description</div>
+<div id="physical-description" class="hidden">
+<strong>Species:</strong> Octoling (Genetically Modified)<br>
+<strong>Eye Color:</strong> Red<br>
+<strong>Hair Color:</strong> Red<br>
+<strong>Skin Tone:</strong> Pale White<br>
+<strong>Height:</strong> 177.8 cm (5'10")<br>
+<strong>Weight:</strong> 73–74 kg (161–163 lbs)<br>
+<strong>Build:</strong> Lean, muscular; optimized for strength and agility to maximize performance in combat and technical operations.<br><br>
+Subject’s physiology reflects controlled exposure to artificial environments and chemical treatments designed to optimize resistance to extreme climates and sustain prolonged physical exertion in hostile conditions.
+</div>
+<hr>
+<div class="category" onclick="toggleVisibility('genetic-modifications')">Genetic Modifications and Enhancements</div>
+<div id="genetic-modifications" class="hidden">
+<strong>Muscle Density and Strength:</strong> Musculature enhanced to improve force generation and fatigue resistance. Subject is capable of extended close-quarters combat and heavy physical labor without significant decline in performance.<br>
+<strong>Bone Structure Reinforcement:</strong> Skeletal system fortified to withstand high-impact trauma. Subject displays reduced risk of fracture and internal injury under extreme physical stress.<br>
+<strong>Reflex and Coordination Optimization:</strong> Neuromuscular systems adjusted to enhance reflex speed and motor coordination. Subject exhibits superior reaction times in high-pressure scenarios.<br>
+<strong>Endurance and Recovery Enhancement:</strong> Metabolic and circulatory modifications allow prolonged physical activity with minimal fatigue accumulation. Recovery time post-exertion is significantly reduced compared to standard Octoling physiology.
+</div>
+<hr>
+<div class="category" onclick="toggleVisibility('psychological-profile')">Psychological Profile</div>
+<div id="psychological-profile" class="hidden">
+Subject MXI78’s psychological profile reflects intensive military conditioning with the objective of minimizing emotional interference and optimizing combat performance. No direct neural rewiring was conducted; psychological shaping was environmental.<br>
+<strong>Cognitive and Behavioral Traits:</strong> Displays a methodical and analytical approach to problem-solving and operational planning. Subject favors solitary operation and observation over direct social engagement, reducing vulnerability to interpersonal compromise.<br>
+<strong>Emotional Stability:</strong> Maintains emotional detachment under standard conditions. Subject has suppressed emotional responses due to long-term exposure to combat environments and loss of personal attachments. Exhibits tendencies toward paranoia and mistrust, particularly toward figures of authority. Displays increased likelihood of impulsive behavior under perceived threats to autonomy.<br>
+<strong>Resistance to Control:</strong> Demonstrates marked resistance to coercion and hierarchical subjugation. Subject’s escape from the Betterment Facility evidences a high risk of insubordination and independent operational deviation if left unchecked.
+</div>
+<hr>
+<div class="category" onclick="toggleVisibility('behavior-under-microchip')">Behavior Under Microchip Influence</div>
+<div id="behavior-under-microchip" class="hidden">
+<strong>Suppression of Empathy:</strong> Subject demonstrates complete emotional disengagement during operational activities. Almost at the Psychopathy level.<br>
+<strong>Predatory Behavior:</strong> Subject prioritizes tactical efficiency and psychological destabilization of opposition forces.<br>
+<strong>Absence of Moral Judgment:</strong> Executes all mission parameters without ethical evaluation.<br>
+<strong>Artificial Reinforcement Loop:</strong> Behavioral analysis indicates microchip-induced positive feedback during high-lethality engagements, increasing subject’s operational compliance.
+</div>
+<hr>
+<div class="category" onclick="toggleVisibility('microchip-implantation')">Microchip Implantation and Control Mechanisms</div>
+<div id="microchip-implantation" class="hidden">
+Subject MXI78 was implanted with a neural microchip following initial escape attempt to enforce operational compliance and augment existing physical capabilities. Functions include:<br>
+<strong>Hypnotic Command Compliance:</strong> Neural override ensuring unquestioning execution of Octarian directives under active influence.<br>
+<strong>Physical Performance Enhancement:</strong> Microchip activation increases muscular output, reflexes, and endurance beyond genetically modified baselines.<br>
+<strong>Suppression of Morality and Ethics:</strong> Complete nullification of internal ethical barriers, enabling execution of all orders without cognitive dissonance or hesitation.<br>
+<strong>Respawn Pad Integration:</strong> Enables utilization of Octarian respawn technology, allowing immediate reactivation following death or incapacitation.
+</div>
+<hr>
+<div class="category" onclick="toggleVisibility('military-service')">Military Service Record</div>
+<div id="military-service" class="hidden">
+Subject served as Technical Officer, Tactical Operations Division. Primary responsibilities included:<br>
+• Maintenance and field repair of critical combat and communication systems.<br>
+• Electronic warfare activities, including hacking and neutralization of enemy technological assets.<br>
+• Tactical support operations requiring advanced technological proficiency and adaptability in hostile environments.<br>
+Subject demonstrated high efficiency and reliability in both independent and coordinated operational contexts.
+</div>
+<hr>
+<div class="category" onclick="toggleVisibility('post-escape-status')">Post-Escape Status</div>
+<div id="post-escape-status" class="hidden">
+Following successful escape from Octarian custody, subject MXI78 has been designated a high-priority fugitive. Subject’s advanced technical knowledge, physical capabilities, and resistance to authority pose significant threats to Octarian military infrastructure and strategic stability.<br>
+Subject is currently believed to be operating within the Splatlands region. Capture or neutralization remains a high-priority directive. Subject is to be considered extremely dangerous, with a high probability of employing sabotage, espionage, and direct assault tactics if confronted.
+</div>
+<hr>
+<strong>End of Report</strong>
+`,
                 image: "images/MXI78.jpg"
             },
             SGA19: {
-                info: `...`,  // Keep the original info here
+                info: `Subject ID: SGA19<br>Status: [REDACTED]<br>Clearance: [REDACTED]<br>Details: [REDACTED - REQUIRES HIGHER CLERAENCE LEVEL]`,
                 image: "images/SGA19.jpg"
             }
         };
 
-        let currentImage = null;
+
+        let currentImage = null;  // Track the current image
 
         function addLine(text, className = '') {
             const line = document.createElement('div');
@@ -147,14 +213,14 @@
 
         function addImage(src) {
             if (currentImage) {
-                currentImage.remove();
+                currentImage.remove();  // Remove the previous image
             }
 
             const img = document.createElement('img');
             img.src = src;
             img.className = 'subject-image';
             terminal.appendChild(img);
-            currentImage = img;
+            currentImage = img;  // Store the reference to the current image
             terminal.scrollTop = terminal.scrollHeight;
         }
 
@@ -175,7 +241,7 @@
             if (input === classificationCode) {
                 authenticated = true;
                 addLine("Welcome MXI78 - Security Clearance: Rebirth", 'output');
-                addLine("Enter a Subject ID to retrieve information.", 'output');
+                addLine("Enter Command Or Subject ID:", 'output');
             } else {
                 addLine("ACCESS DENIED. Enter Classification Code:", 'output');
             }
@@ -200,13 +266,13 @@
 
         function showHelp() {
             addLine(`
-                    <strong>Available Commands:</strong><br>
-                    <strong>help</strong> - Displays this help message.<br>
-                    <strong>status</strong> - Displays the current terminal status.<br>
-                    <strong>exit</strong> - Exits the terminal session.<br>
-                    <strong>clear</strong> - Clears the terminal screen.<br>
-                    <strong>[Subject ID]</strong> - View information about a specific subject (e.g., MXI78).<br>
-                `, 'output');
+                            <strong>Available Commands:</strong><br>
+                            <strong>help</strong> - Displays this help message.<br>
+                            <strong>status</strong> - Displays the current terminal status.<br>
+                            <strong>exit</strong> - Exits the terminal session.<br>
+                            <strong>clear</strong> - Clears the terminal screen.<br>
+                            <strong>[Subject ID]</strong> - View information about a specific subject.<br>
+                        `, 'output');
         }
 
         function showStatus() {
@@ -225,10 +291,23 @@
         }
 
         function clearTerminalOutput() {
-            terminal.innerHTML = '';
-            addLine("Enter Classification Code:", 'output');
+            terminal.querySelectorAll('.line').forEach(line => line.remove());
+            currentImage.remove(); // Clear all lines except the input
+            addLine("Enter Command Or Subject ID:", 'output');  // Show prompt again
+
+            // Ensure the input field stays in place
+            const inputElement = document.getElementById('command-input');
+            inputElement.value = '';  // Clear the current input text
+            inputElement.focus();  // Keep the focus on the input field
         }
 
+
+            function toggleVisibility(id) {
+      const element = document.getElementById(id);
+            if (element) {
+                element.classList.toggle('hidden');
+      }
+}
     </script>
 </body>
 </html>
